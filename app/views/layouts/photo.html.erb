@@ -1,0 +1,56 @@
+<h1>Photo Details</h1>
+<dl>
+  <dt>Image</dt>
+  <dd><img src="<%=@photo.image%>"></dd>
+  <dt>Caption</dt>
+  <dd><p><%=@photo.caption%></p></dd>
+  <dt>Owner</dt>
+  <dd><%=User.where({ :id => @photo.owner_id }).first.username%></dd>
+  <dt>Posted</dt>
+  <dd><%=time_ago_in_words(@photo.created_at)%></dd>
+  <dt>Edit photo</dt>
+  <dd>
+    <form action="/update_photo/<%=@photo.id%>">
+      <label for="image">Image</label>
+      <input id="image" type="text" name="input_image" placeholder="Enter a URL for the image..." value="<%=@photo.image%>">
+      <label for="caption">Caption</label>
+      <textarea id="caption" type="text" name="input_caption" placeholder="Enter a caption for the photo..."><%=@photo.caption%></textarea>
+      <button>Update photo</button>
+    </form>
+  </dd>
+  <dt>Delete photo</dt>
+  <dd><a href="/delete_photo/<%=@photo.id%>">Delete this photo</a></dd>
+</dl>
+
+<h2>Comments</h2>
+<table>
+  <tr>
+    <th> Commenter </th>
+    <th> Comment </th>
+    <th> Posted </th>
+  </tr>
+  <% @comments.each do |comment| %>
+  <tr>
+    <td>
+      <%= User.where({ :id=> comment.author_id }).first.username %>
+    </td>
+    <td>
+      <%= comment.body %>
+    </td>
+    <td>
+      <%= comment.created_at %>
+    </td>
+  </tr>
+  <% end %>
+</table>
+
+<h2>Add a new comment</h2>
+    <form action="/add_comment/<%=@photo.id%>">
+      <label for="photo_id">Photo ID</label>
+      <input id="photo_id" type="text" name="input_photo_id" value="<%=@photo.id%>">
+      <label for="author_id">Author ID</label>
+      <input id="author_id" type="text" name="input_author_id">
+      <label for="comment">Comment</label>
+      <textarea id="comment" type="text" name="input_comment" placeholder="Enter a comment..."></textarea>
+      <button>Add comment</button>
+    </form>
